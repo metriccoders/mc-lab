@@ -1,0 +1,79 @@
+/* General Window Styling */
+QMainWindow {
+    background-color: #ffffff; /* White background */
+    color: #000000; /* Black text */
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+}
+
+/* Buttons */
+QPushButton {
+    background-color: #000000; /* Black background */
+    color: #ffffff; /* White text */
+    border: none;
+    border-radius: 4px; /* Subtle rounded corners */
+    padding: 8px 16px; /* Internal padding */
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+QPushButton:hover {
+    background-color: #333333; /* Darker black when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #666666; /* Lighter black when pressed */
+}
+
+/* Textbox */
+QLineEdit {
+    background-color: #ffffff; /* White background */
+    border: 1px solid #000000; /* Black border */
+    border-radius: 4px; /* Subtle rounded corners */
+    padding: 6px 10px; /* Internal padding */
+    font-size: 14px;
+    color: #000000; /* Black text */
+}
+
+QLineEdit:focus {
+    border: 2px solid #000000; /* Thicker black border when focused */
+}
+
+/* Labels */
+QLabel {
+    color: #000000; /* Black text */
+    font-size: 14px;
+}
+
+/* ComboBox */
+QComboBox {
+    background-color: #ffffff; /* White background */
+    border: 1px solid #000000; /* Black border */
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 14px;
+    color: #000000; /* Black text */
+}
+
+QComboBox::drop-down {
+    border-left: 1px solid #000000; /* Black border for dropdown */
+    background-color: #ffffff; /* White dropdown button */
+}
+
+/* Scrollbars */
+QScrollBar:vertical, QScrollBar:horizontal {
+    background-color: #f0f0f0; /* Light gray background */
+    width: 8px;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle {
+    background-color: #000000; /* Black scrollbar handle */
+    border-radius: 4px;
+}
+
+QScrollBar::handle:hover {
+    background-color: #333333; /* Darker handle when hovered */
+}
