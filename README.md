@@ -46,7 +46,7 @@ Follow these steps to get started with MC Lab:
 
 2. Run the application:
    ```bash
-   python mc_lab.py
+   python app.py
    ```
 
 ---
