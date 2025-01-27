@@ -55,7 +55,7 @@ Follow these steps to get started with MC Lab:
 
 ### Starting the Application
 
-Run `mc_lab.py` to launch the GUI application. The application starts in full-screen mode and includes the following features:
+Run `app.py` to launch the GUI application. The application starts in full-screen mode and includes the following features:
 
 1. **Search and Download Models**:
    - Use the search bar to find models on Hugging Face.
