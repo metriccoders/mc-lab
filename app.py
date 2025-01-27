@@ -34,6 +34,7 @@ from langchain_community.llms import LlamaCpp
 from langchain_core.callbacks import CallbackManager, StreamingStdOutCallbackHandler
 from langchain_core.prompts import PromptTemplate
 
+
 template = """
 Question: {question}
 
@@ -71,7 +72,7 @@ class FullScreenApp(QMainWindow):
         self.results_area.setWidget(self.results_container)
         self.results_area.setWidgetResizable(True)
         self.results_area.setStyleSheet("background-color: white; border: 1px solid #e2e8f0;")
-        self.results_area.setFixedHeight(400)        
+        self.results_area.setFixedHeight(800)        
         
         main_layout = QVBoxLayout()
         main_layout.addLayout(h_layout)
@@ -154,18 +155,47 @@ class FullScreenApp(QMainWindow):
 
     def show_chat_area(self):
         # Add a chat input and button after download
-        chat_label = QLabel("Start chatting with the downloaded model:")
-        chat_textbox = QLineEdit(self)
-        chat_button = QPushButton("Send")
-
+        self.chat_label = QLabel("Start chatting with the downloaded model:")
+        self.chat_textbox = QLineEdit(self)
+        self.chat_textbox.setPlaceholderText("Type your message here")
+        self.chat_button = QPushButton("Send")
+        self.chat_button.setFixedHeight(40)
+        self.chat_button.setStyleSheet(
+            "background-color: #3b82f6; color: white; border-radius: 4px; padding: 4px 8px;"
+        )
+        self.chat_button.clicked.connect(self.send_message_to_model)
+        
+        
         # Define the chat layout
-        chat_layout = QHBoxLayout()
-        chat_layout.addWidget(chat_textbox)
-        chat_layout.addWidget(chat_button)
+        self.chat_layout = QHBoxLayout()
+        self.chat_layout.addWidget(self.chat_textbox)
+        self.chat_layout.addWidget(self.chat_button)
 
         # Add to the main layout
-        self.results_layout.addWidget(chat_label)
-        self.results_layout.addLayout(chat_layout)
+        self.results_layout.addWidget(self.chat_label)
+        self.results_layout.addLayout(self.chat_layout)
+
+        self.chat_response_textbox = QTextEdit(self)
+        self.chat_response_textbox.setPlaceholderText("Model response")
+        self.results_layout.addWidget(self.chat_response_textbox)
+        
+        
+    def send_message_to_model(self):
+        chat_message = self.chat_textbox.text()
+        print("You sent...", chat_message)
+        
+        callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
+        llm = LlamaCpp(
+            
+            model_path="llama-2-7b-chat.Q2_K.gguf",
+            temperature=0.8,
+            max_tokens=2500,
+            top_p=1,
+            callback_manager=callback_manager,
+            verbose=True
+        )
+        
+        self.chat_response_textbox.setText(str(llm(chat_message)))
     
     
     def keyPressEvent(self, event):
