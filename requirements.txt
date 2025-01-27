@@ -3,3 +3,5 @@ langchain
 huggingface_hub
 langchain_community
 llama-cpp-python
+fastapi
+uvicorn

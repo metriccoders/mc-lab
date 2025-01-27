@@ -1,4 +1,7 @@
 import sys
+import threading
+from fastapi import FastAPI
+from uvicorn import Config, Server
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
 from PyQt5.QtWidgets import (
     QApplication,
@@ -46,6 +49,7 @@ class FullScreenApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
+        self.start_fastapi_server()
 
     def initUI(self):
         self.setWindowTitle("MC Studio")
@@ -204,7 +208,40 @@ class FullScreenApp(QMainWindow):
         
         self.chat_response_textbox.setText(str(llm(chat_message)))
     
-    
+    def start_fastapi_server(self):
+        
+        app = FastAPI()
+
+        @app.get("/")
+        async def read_root():
+            return {"message": "FastAPI server is running!"}
+        
+        
+        @app.post("/chat")
+        async def chat_with_model(request: dict):
+            callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
+            llm = LlamaCpp(
+                model_path="../meta-llama/llama-2-7b-chat.Q2_K.gguf",
+                temperature=0.8,
+                max_tokens=2500,
+                top_p=1,
+                callback_manager=callback_manager,
+                verbose=True
+            )
+            return {"response": llm(request["message"])}
+                
+
+        def run_server():
+            print("Starting FastAPI server...")
+            config = Config(app=app, host="127.0.0.1", port=8000, log_level="info")
+            server = Server(config)
+            server.run()
+
+        # Run the FastAPI server in a separate thread
+        server_thread = threading.Thread(target=run_server, daemon=True)
+        server_thread.start()
+        
+        
     def keyPressEvent(self, event):
         # Allow the user to exit full-screen mode with the 'Esc' key
         if event.key() == Qt.Key_Escape:
